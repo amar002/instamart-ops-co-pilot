@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PodData } from '../types';
-import ChatBot from '../components/ChatBot';
 import { THRESHOLDS } from '../utils/constants';
 
 interface PodWithAction extends PodData {
@@ -21,7 +20,6 @@ const CityPods: React.FC = () => {
   const [cityUnserviceability, setCityUnserviceability] = useState<number>(0);
   const [breachedPods, setBreachedPods] = useState<number>(0);
   const [cityActionLog, setCityActionLog] = useState<string>('');
-  const [chatOpen, setChatOpen] = useState(false);
   const [, setLoading] = useState(true);
 
   useEffect(() => {
@@ -108,19 +106,10 @@ const CityPods: React.FC = () => {
                 </p>
               )}
             </div>
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => setChatOpen(true)}
-                className="px-4 py-2 bg-accent-500 text-white rounded-xl shadow-soft hover:shadow-medium transition-all duration-200 font-medium flex items-center space-x-2 hover:scale-105"
-              >
-                <span className="text-lg">💬</span>
-                <span className="hidden sm:inline">Ask AI</span>
-              </button>
-              <div className="text-right">
-                <div className="text-sm text-gray-400">Last Updated</div>
-                <div className="text-xs text-gray-500">{lastUpdated}</div>
-                <div className="text-xs text-gray-500">(hourly)</div>
-              </div>
+            <div className="text-right">
+              <div className="text-sm text-gray-400">Last Updated</div>
+              <div className="text-xs text-gray-500">{lastUpdated}</div>
+              <div className="text-xs text-gray-500">(hourly)</div>
             </div>
           </div>
         </div>
@@ -203,8 +192,6 @@ const CityPods: React.FC = () => {
         </div>
       </div>
 
-      {/* ChatBot */}
-      <ChatBot isOpen={chatOpen} onToggle={() => setChatOpen(!chatOpen)} />
     </div>
   );
 };
