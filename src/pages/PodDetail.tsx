@@ -14,6 +14,7 @@ const PodDetail: React.FC = () => {
   const [currentPod, setCurrentPod] = useState<PodData | null>(null);
   const [loading, setLoading] = useState(true);
   const [chatOpen, setChatOpen] = useState(false);
+  const [surgeActions, setSurgeActions] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const fetchPodData = async () => {
@@ -23,6 +24,12 @@ const PodDetail: React.FC = () => {
         const trend = getPodTrend(data, podId!);
         setPodTrend(trend);
         setCurrentPod(trend[0] || null);
+        
+        // Load existing surge actions from localStorage
+        const savedActions = localStorage.getItem(`surge-actions-${podId}`);
+        if (savedActions) {
+          setSurgeActions(JSON.parse(savedActions));
+        }
       } catch (error) {
         console.error('Error fetching pod data:', error);
       } finally {
@@ -34,6 +41,12 @@ const PodDetail: React.FC = () => {
       fetchPodData();
     }
   }, [podId]);
+
+  const handleSurgeActionToggle = (cohort: string) => {
+    const newActions = { ...surgeActions, [cohort]: !surgeActions[cohort] };
+    setSurgeActions(newActions);
+    localStorage.setItem(`surge-actions-${podId}`, JSON.stringify(newActions));
+  };
 
   if (loading) {
     return (
@@ -204,14 +217,12 @@ const PodDetail: React.FC = () => {
                           <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Cohort</th>
                           <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Current Price</th>
                           <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Recommended Price</th>
-                          <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Price Change</th>
+                          <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Action Taken</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-dark-border">
                         {currentPod.surge_table.map((row, index) => {
-                          const priceChange = row.recommended_surge_rupees! - row.current_surge_rupees!;
-                          const priceChangePercent = ((priceChange / row.current_surge_rupees!) * 100);
-                          const isIncrease = priceChange > 0;
+                          const isActionTaken = surgeActions[row.cohort] || false;
                           
                           return (
                             <tr key={index} className={`${index % 2 === 0 ? 'bg-dark-card' : 'bg-dark-hover'} hover:bg-dark-border transition-colors duration-200`}>
@@ -234,22 +245,16 @@ const PodDetail: React.FC = () => {
                                 </div>
                               </td>
                               <td className="px-3 md:px-6 py-3 md:py-4 text-sm">
-                                <div className="flex flex-col md:flex-row md:items-center space-y-1 md:space-y-0 md:space-x-2">
-                                  <span className={`inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs font-semibold ${
-                                    isIncrease 
-                                      ? 'bg-error-500/20 text-error-400' 
-                                      : 'bg-success-500/20 text-success-400'
-                                  }`}>
-                                    {isIncrease ? '↗' : '↘'} {isIncrease ? '+' : ''}{priceChangePercent.toFixed(0)}%
-                                  </span>
-                                  <span className={`text-xs font-medium ${
-                                    isIncrease 
-                                      ? 'text-error-500' 
-                                      : 'text-success-500'
-                                  }`}>
-                                    {isIncrease ? '+' : ''}₹{priceChange}
-                                  </span>
-                                </div>
+                                <button
+                                  onClick={() => handleSurgeActionToggle(row.cohort)}
+                                  className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 ${
+                                    isActionTaken
+                                      ? 'bg-success-500/20 text-success-400 border border-success-500/30'
+                                      : 'bg-gray-500/20 text-gray-400 border border-gray-500/30 hover:bg-accent-500/20 hover:text-accent-400 hover:border-accent-500/30'
+                                  }`}
+                                >
+                                  {isActionTaken ? '✓ Completed' : 'Mark Complete'}
+                                </button>
                               </td>
                             </tr>
                           );

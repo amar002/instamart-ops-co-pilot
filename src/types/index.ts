@@ -44,6 +44,7 @@ export interface PodData {
     recommended_surge: number;
     current_surge_rupees?: number;
     recommended_surge_rupees?: number;
+    action_taken?: boolean;
   }>;
   workforce_table?: Array<{
     cohort: string;
