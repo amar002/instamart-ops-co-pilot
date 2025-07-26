@@ -147,31 +147,28 @@ const PodDetail: React.FC = () => {
         </div>
 
         {/* Hourly Metrics Charts (Collapsible) */}
-        {currentPod.hourly_metrics && currentPod.hourly_metrics_yesterday && currentPod.hourly_metrics_sdlw && (
-          <div className="mb-4 md:mb-6 space-y-3 md:space-y-4">
-            <CollapsibleSection title="O2HAR Chart">
-              <MetricsChart
-                todayMetrics={currentPod.hourly_metrics}
-                yesterdayMetrics={currentPod.hourly_metrics_yesterday}
-                sdlwMetrics={currentPod.hourly_metrics_sdlw}
-                metricType="o2har"
-              />
-            </CollapsibleSection>
-            <CollapsibleSection title="Unserviceability Chart">
-              <MetricsChart
-                todayMetrics={currentPod.hourly_metrics}
-                yesterdayMetrics={currentPod.hourly_metrics_yesterday}
-                sdlwMetrics={currentPod.hourly_metrics_sdlw}
-                metricType="unserviceability"
-              />
-            </CollapsibleSection>
-          </div>
-        )}
+        <div className="mb-4 md:mb-6 space-y-3 md:space-y-4">
+          <CollapsibleSection title="O2HAR Chart">
+            <MetricsChart
+              todayMetrics={currentPod.hourly_metrics || []}
+              yesterdayMetrics={currentPod.hourly_metrics_yesterday || []}
+              sdlwMetrics={currentPod.hourly_metrics_sdlw || []}
+              metricType="o2har"
+            />
+          </CollapsibleSection>
+          <CollapsibleSection title="Unserviceability Chart">
+            <MetricsChart
+              todayMetrics={currentPod.hourly_metrics || []}
+              yesterdayMetrics={currentPod.hourly_metrics_yesterday || []}
+              sdlwMetrics={currentPod.hourly_metrics_sdlw || []}
+              metricType="unserviceability"
+            />
+          </CollapsibleSection>
+        </div>
 
         {/* Root Causes & Recommendations */}
-        {(o2harBreached || unserviceabilityBreached) && (
-          <div className="bg-dark-card border border-dark-border rounded-xl shadow-soft p-4 md:p-6 mb-4 md:mb-6">
-            <h2 className="text-lg md:text-xl font-bold text-white mb-4 md:mb-6">Analysis & Recommendations</h2>
+        <div className="bg-dark-card border border-dark-border rounded-xl shadow-soft p-4 md:p-6 mb-4 md:mb-6">
+          <h2 className="text-lg md:text-xl font-bold text-white mb-4 md:mb-6">Analysis & Recommendations</h2>
             {/* Root Causes */}
             {currentPod.root_causes_details && (
               <div className="mb-4 md:mb-6">
@@ -322,7 +319,6 @@ const PodDetail: React.FC = () => {
               </div>
             )}
           </div>
-        )}
 
         {/* ChatBot */}
         <ChatBot isOpen={chatOpen} onToggle={() => setChatOpen(!chatOpen)} />
