@@ -209,15 +209,15 @@ const PodDetail: React.FC = () => {
             {currentPod.surge_table && (
               <div>
                 <h3 className="text-md font-medium text-white mb-3 md:mb-4">Surge Pricing Recommendations</h3>
-                <div className="overflow-x-auto">
-                  <div className="bg-dark-card border border-dark-border rounded-xl shadow-soft overflow-hidden">
-                    <table className="min-w-full">
+                <div className="overflow-x-auto -mx-4 md:mx-0">
+                  <div className="bg-dark-card border border-dark-border rounded-xl shadow-soft overflow-hidden min-w-[600px] md:min-w-full">
+                    <table className="w-full">
                       <thead className="bg-dark-hover">
                         <tr>
-                          <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Cohort</th>
-                          <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Current Price</th>
-                          <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Recommended Price</th>
-                          <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Action Taken</th>
+                          <th className="px-2 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider min-w-[120px]">Cohort</th>
+                          <th className="px-2 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider min-w-[100px]">Current Price</th>
+                          <th className="px-2 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider min-w-[100px]">Recommended Price</th>
+                          <th className="px-2 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider min-w-[120px]">Action Taken</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-dark-border">
@@ -226,34 +226,34 @@ const PodDetail: React.FC = () => {
                           
                           return (
                             <tr key={index} className={`${index % 2 === 0 ? 'bg-dark-card' : 'bg-dark-hover'} hover:bg-dark-border transition-colors duration-200`}>
-                              <td className="px-3 md:px-6 py-3 md:py-4 text-sm font-medium text-white">
+                              <td className="px-2 md:px-6 py-3 md:py-4 text-sm font-medium text-white min-w-[120px]">
                                 <div className="flex items-center space-x-2">
                                   <div className="w-2 h-2 bg-accent-500 rounded-full flex-shrink-0"></div>
-                                  <span className="text-xs md:text-sm">{row.cohort}</span>
+                                  <span className="text-xs">{row.cohort}</span>
                                 </div>
                               </td>
-                              <td className="px-3 md:px-6 py-3 md:py-4 text-sm text-gray-300">
-                                <div className="flex flex-col md:flex-row md:items-center space-y-1 md:space-y-0 md:space-x-2">
-                                  <span className="text-base md:text-lg font-semibold text-white">₹{row.current_surge_rupees}</span>
+                              <td className="px-2 md:px-6 py-3 md:py-4 text-sm text-gray-300 min-w-[100px]">
+                                <div className="flex flex-col space-y-1">
+                                  <span className="text-sm md:text-lg font-semibold text-white">₹{row.current_surge_rupees}</span>
                                   <span className="text-xs text-gray-400">per order</span>
                                 </div>
                               </td>
-                              <td className="px-3 md:px-6 py-3 md:py-4 text-sm text-gray-300">
-                                <div className="flex flex-col md:flex-row md:items-center space-y-1 md:space-y-0 md:space-x-2">
-                                  <span className="text-base md:text-lg font-semibold text-white">₹{row.recommended_surge_rupees}</span>
+                              <td className="px-2 md:px-6 py-3 md:py-4 text-sm text-gray-300 min-w-[100px]">
+                                <div className="flex flex-col space-y-1">
+                                  <span className="text-sm md:text-lg font-semibold text-white">₹{row.recommended_surge_rupees}</span>
                                   <span className="text-xs text-gray-400">per order</span>
                                 </div>
                               </td>
-                              <td className="px-3 md:px-6 py-3 md:py-4 text-sm">
+                              <td className="px-2 md:px-6 py-3 md:py-4 text-sm min-w-[120px]">
                                 <button
                                   onClick={() => handleSurgeActionToggle(row.cohort)}
-                                  className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 ${
+                                  className={`px-2 md:px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 whitespace-nowrap ${
                                     isActionTaken
                                       ? 'bg-success-500/20 text-success-400 border border-success-500/30'
                                       : 'bg-gray-500/20 text-gray-400 border border-gray-500/30 hover:bg-accent-500/20 hover:text-accent-400 hover:border-accent-500/30'
                                   }`}
                                 >
-                                  {isActionTaken ? '✓ Completed' : 'Mark Complete'}
+                                  {isActionTaken ? '✓ Done' : 'Mark Done'}
                                 </button>
                               </td>
                             </tr>
@@ -269,35 +269,35 @@ const PodDetail: React.FC = () => {
             {currentPod.workforce_table && (
               <div>
                 <h3 className="text-md font-medium text-white mb-3 md:mb-4">Workforce Management</h3>
-                <div className="overflow-x-auto">
-                  <div className="bg-dark-card border border-dark-border rounded-xl shadow-soft overflow-hidden">
-                    <table className="min-w-full">
+                <div className="overflow-x-auto -mx-4 md:mx-0">
+                  <div className="bg-dark-card border border-dark-border rounded-xl shadow-soft overflow-hidden min-w-[600px] md:min-w-full">
+                    <table className="w-full">
                       <thead className="bg-dark-hover">
                         <tr>
-                          <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Cohort</th>
-                          <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">DEs Needed</th>
-                          <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Current DEs</th>
-                          <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Gap</th>
+                          <th className="px-2 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider min-w-[120px]">Cohort</th>
+                          <th className="px-2 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider min-w-[80px]">DEs Needed</th>
+                          <th className="px-2 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider min-w-[80px]">Current DEs</th>
+                          <th className="px-2 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider min-w-[80px]">Gap</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-dark-border">
                         {currentPod.workforce_table.map((row, index) => (
                           <tr key={index} className={`${index % 2 === 0 ? 'bg-dark-card' : 'bg-dark-hover'} hover:bg-dark-border transition-colors duration-200`}>
-                            <td className="px-3 md:px-6 py-3 md:py-4 text-sm font-medium text-white">
+                            <td className="px-2 md:px-6 py-3 md:py-4 text-sm font-medium text-white min-w-[120px]">
                               <div className="flex items-center space-x-2">
                                 <div className="w-2 h-2 bg-accent-500 rounded-full flex-shrink-0"></div>
-                                <span className="text-xs md:text-sm">{row.cohort}</span>
+                                <span className="text-xs">{row.cohort}</span>
                               </div>
                             </td>
-                            <td className="px-3 md:px-6 py-3 md:py-4 text-sm text-gray-300">
-                              <span className="text-base md:text-lg font-semibold text-white">{row.needed}</span>
+                            <td className="px-2 md:px-6 py-3 md:py-4 text-sm text-gray-300 min-w-[80px]">
+                              <span className="text-sm md:text-lg font-semibold text-white">{row.needed}</span>
                             </td>
-                            <td className="px-3 md:px-6 py-3 md:py-4 text-sm text-gray-300">
-                              <span className="text-base md:text-lg font-semibold text-white">{row.current}</span>
+                            <td className="px-2 md:px-6 py-3 md:py-4 text-sm text-gray-300 min-w-[80px]">
+                              <span className="text-sm md:text-lg font-semibold text-white">{row.current}</span>
                             </td>
-                            <td className="px-3 md:px-6 py-3 md:py-4 text-sm">
-                              <div className="flex flex-col md:flex-row md:items-center space-y-1 md:space-y-0 md:space-x-2">
-                                <span className={`inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs font-semibold ${
+                            <td className="px-2 md:px-6 py-3 md:py-4 text-sm min-w-[80px]">
+                              <div className="flex flex-col space-y-1">
+                                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${
                                   row.gap > 0 
                                     ? 'bg-error-500/20 text-error-400' 
                                     : 'bg-success-500/20 text-success-400'
