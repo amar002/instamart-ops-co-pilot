@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Alert, PodData } from '../types';
+import { PodData, Alert } from '../types';
 import { getLatestPodData } from '../utils/helpers';
-import DarkModeToggle from '../components/DarkModeToggle';
 
 const Alerts: React.FC = () => {
   const navigate = useNavigate();
@@ -87,40 +86,46 @@ const Alerts: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-dark-bg">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-4xl mx-auto px-4 py-4">
+      <div className="bg-dark-card border-b border-dark-border">
+        <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
-            <div>
+            <div className="flex items-center space-x-6">
               <button
                 onClick={() => navigate('/')}
-                className="text-instamart-blue hover:text-blue-600 mb-2 flex items-center"
+                className="text-gray-400 hover:text-white transition-colors flex items-center space-x-2"
               >
-                ← Back to Dashboard
+                <span>←</span>
+                <span>Back to Dashboard</span>
               </button>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Alert Setup</h1>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Configure metric alerts for pods</p>
+              <div>
+                <h1 className="text-3xl font-bold text-white">
+                  Alert Management
+                </h1>
+                <p className="text-gray-400 text-sm mt-1">
+                  Set up and manage metric alerts
+                </p>
+              </div>
             </div>
-            <DarkModeToggle />
           </div>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Create Alert Form */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Create New Alert</h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-dark-card border border-dark-border rounded-xl shadow-soft p-6 mb-6">
+          <h2 className="text-xl font-bold text-white mb-6">Create New Alert</h2>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-white mb-3">
                   Pod
                 </label>
                 <select
                   value={formData.podId}
                   onChange={(e) => setFormData(prev => ({ ...prev, podId: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-instamart-blue focus:border-transparent"
+                  className="w-full px-4 py-3 border border-dark-border bg-dark-hover text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent"
                   required
                 >
                   <option value="">Select a pod</option>
@@ -133,13 +138,13 @@ const Alerts: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-white mb-3">
                   Metric
                 </label>
                 <select
                   value={formData.metric}
                   onChange={(e) => setFormData(prev => ({ ...prev, metric: e.target.value as 'o2har' | 'unserviceability' }))}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-instamart-blue focus:border-transparent"
+                  className="w-full px-4 py-3 border border-dark-border bg-dark-hover text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent"
                 >
                   <option value="o2har">O2HAR</option>
                   <option value="unserviceability">Unserviceability</option>
@@ -147,15 +152,15 @@ const Alerts: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-white mb-3">
                   Condition
                 </label>
                 <select
                   value={formData.condition}
                   onChange={(e) => setFormData(prev => ({ ...prev, condition: e.target.value as '>' | '<' }))}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-instamart-blue focus:border-transparent"
+                  className="w-full px-4 py-3 border border-dark-border bg-dark-hover text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent"
                 >
                   <option value=">">Greater than</option>
                   <option value="<">Less than</option>
@@ -163,7 +168,7 @@ const Alerts: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-white mb-3">
                   Threshold
                 </label>
                 <input
@@ -171,8 +176,7 @@ const Alerts: React.FC = () => {
                   step="0.1"
                   value={formData.threshold}
                   onChange={(e) => setFormData(prev => ({ ...prev, threshold: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-instamart-blue focus:border-transparent"
-                  placeholder={formData.metric === 'o2har' ? '9.0 Mins' : '5.0%'}
+                  className="w-full px-4 py-3 border border-dark-border bg-dark-hover text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent"
                   required
                 />
               </div>
@@ -180,7 +184,7 @@ const Alerts: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full md:w-auto px-6 py-2 bg-instamart-blue text-white rounded-lg hover:bg-blue-600 transition-colors"
+              className="w-full bg-accent-500 text-white py-3 px-6 rounded-xl hover:shadow-medium transition-all duration-200 font-medium hover:scale-105"
             >
               Create Alert
             </button>
@@ -188,42 +192,40 @@ const Alerts: React.FC = () => {
         </div>
 
         {/* Saved Alerts */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Saved Alerts</h2>
+        <div className="bg-dark-card border border-dark-border rounded-xl shadow-soft p-6">
+          <h2 className="text-xl font-bold text-white mb-6">Saved Alerts</h2>
           {alerts.length === 0 ? (
-            <p className="text-gray-600 dark:text-gray-400 text-center py-8">No alerts configured yet</p>
+            <p className="text-gray-400 text-center py-8">No alerts configured</p>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {alerts.map((alert) => (
-                <div key={alert.id} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                <div key={alert.id} className="bg-dark-hover border border-dark-border rounded-xl p-4 flex items-center justify-between">
                   <div className="flex-1">
-                    <div className="flex items-center space-x-4">
-                      <div className={`w-3 h-3 rounded-full ${alert.isActive ? 'bg-instamart-green' : 'bg-gray-300 dark:bg-gray-600'}`}></div>
-                      <div>
-                        <p className="font-medium text-gray-900 dark:text-white">
-                          {getPodName(alert.podId)} - {alert.metric.toUpperCase()}
-                        </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                          {alert.condition} {alert.threshold}
-                          {alert.metric === 'unserviceability' ? '%' : ''}
-                        </p>
-                      </div>
+                    <div className="flex items-center space-x-3 mb-2">
+                      <span className="text-white font-medium">{getPodName(alert.podId)}</span>
+                      <span className="text-gray-400">•</span>
+                      <span className="text-gray-400 capitalize">{alert.metric}</span>
+                      <span className="text-gray-400">{alert.condition}</span>
+                      <span className="text-white font-semibold">{alert.threshold}</span>
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {alert.metric === 'o2har' ? 'Minutes' : 'Percentage'}
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-3">
                     <button
                       onClick={() => toggleAlert(alert.id)}
-                      className={`px-3 py-1 rounded text-sm ${
+                      className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                         alert.isActive
-                          ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                          : 'bg-instamart-green text-white hover:bg-green-600'
+                          ? 'bg-success-500 text-white'
+                          : 'bg-gray-200 text-gray-700'
                       }`}
                     >
-                      {alert.isActive ? 'Disable' : 'Enable'}
+                      {alert.isActive ? 'Active' : 'Inactive'}
                     </button>
                     <button
                       onClick={() => deleteAlert(alert.id)}
-                      className="px-3 py-1 bg-instamart-red text-white rounded text-sm hover:bg-red-600"
+                      className="bg-error-500 text-white px-3 py-1 rounded-full text-sm font-medium hover:bg-error-600 transition-colors"
                     >
                       Delete
                     </button>

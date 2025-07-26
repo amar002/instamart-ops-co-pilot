@@ -7,15 +7,8 @@ import CityPods from './pages/CityPods';
 
 const App: React.FC = () => {
   useEffect(() => {
-    // Initialize dark mode from localStorage on app startup
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    // Force dark mode
+    document.documentElement.classList.add('dark');
   }, []);
 
   return (

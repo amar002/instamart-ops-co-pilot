@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PodData } from '../types';
-import DarkModeToggle from '../components/DarkModeToggle';
+import ChatBot from '../components/ChatBot';
+import { THRESHOLDS } from '../utils/constants';
 
 interface PodWithAction extends PodData {
   actionLog: string;
@@ -20,7 +21,8 @@ const CityPods: React.FC = () => {
   const [cityUnserviceability, setCityUnserviceability] = useState<number>(0);
   const [breachedPods, setBreachedPods] = useState<number>(0);
   const [cityActionLog, setCityActionLog] = useState<string>('');
-  const [loading, setLoading] = useState(true);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPods = async () => {
@@ -48,7 +50,7 @@ const CityPods: React.FC = () => {
           podsArr.forEach(pod => {
             o2har += pod.o2har;
             unserviceability += pod.unserviceability;
-            if (pod.o2har > 9.0 || pod.unserviceability > 5.0) breached++;
+            if (pod.o2har > THRESHOLDS.O2HAR || pod.unserviceability > THRESHOLDS.UNSERVICEABILITY) breached++;
             if (new Date(pod.date) > new Date(last)) last = pod.date;
           });
           setCityO2har(o2har / podsArr.length);
@@ -77,53 +79,79 @@ const CityPods: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-dark-bg">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <button onClick={() => navigate('/')} className="text-instamart-blue hover:text-blue-600 mb-2 flex items-center">← Back to All Cities</button>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{cityName}</h1>
-            {cityOwner && (
-              <p className="text-xs text-gray-500 dark:text-gray-400">Owner: {cityOwner.name} (<a href={`mailto:${cityOwner.email}`} className="text-instamart-blue underline">{cityOwner.email}</a>)</p>
-            )}
-          </div>
-          <div className="flex items-center space-x-4">
-            <div className="text-xs text-gray-600 dark:text-gray-400 text-right">
-              <span className="block">Updated: <span className="font-semibold text-gray-800 dark:text-gray-200">{lastUpdated}</span></span>
-              <span className="block">(hourly)</span>
+      <div className="bg-dark-card border-b border-dark-border">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-6">
+              <button
+                onClick={() => navigate('/')}
+                className="text-gray-400 hover:text-white transition-colors flex items-center space-x-2"
+              >
+                <span>←</span>
+                <span>Back to All Cities</span>
+              </button>
             </div>
-            <DarkModeToggle />
+            <div className="text-right">
+              <h1 className="text-3xl font-bold text-white">{cityName}</h1>
+              {cityOwner && (
+                <p className="text-gray-400 text-sm mt-1">
+                  Owner: {cityOwner.name} (
+                  <a 
+                    href={`mailto:${cityOwner.email}`} 
+                    className="text-accent-500 hover:text-accent-400 underline transition-colors"
+                  >
+                    {cityOwner.email}
+                  </a>
+                  )
+                </p>
+              )}
+            </div>
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => setChatOpen(true)}
+                className="px-4 py-2 bg-accent-500 text-white rounded-xl shadow-soft hover:shadow-medium transition-all duration-200 font-medium flex items-center space-x-2 hover:scale-105"
+              >
+                <span className="text-lg">💬</span>
+                <span className="hidden sm:inline">Ask AI</span>
+              </button>
+              <div className="text-right">
+                <div className="text-sm text-gray-400">Last Updated</div>
+                <div className="text-xs text-gray-500">{lastUpdated}</div>
+                <div className="text-xs text-gray-500">(hourly)</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* City Metrics Summary */}
-      <div className="max-w-4xl mx-auto px-4 py-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex flex-col items-center">
-          <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">O2HAR</span>
-          <span className={`text-2xl font-bold ${cityO2har > 9.0 ? 'text-instamart-red' : 'text-instamart-green'}`}>{cityO2har.toFixed(1)} Mins</span>
-          <span className="text-xs text-gray-400 dark:text-gray-500">Threshold: 9.0 Mins</span>
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* City Metrics Summary */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-dark-card border border-dark-border rounded-xl shadow-soft p-6 flex flex-col items-center hover:shadow-medium transition-all duration-200">
+            <span className="text-sm text-gray-400 mb-2 font-medium">O2HAR</span>
+            <span className={`text-3xl font-bold ${cityO2har > THRESHOLDS.O2HAR ? 'text-error-500' : 'text-success-500'}`}>{cityO2har.toFixed(1)} Mins</span>
+            <span className="text-xs text-gray-500">Threshold: {THRESHOLDS.O2HAR} Mins</span>
+          </div>
+          <div className="bg-dark-card border border-dark-border rounded-xl shadow-soft p-6 flex flex-col items-center hover:shadow-medium transition-all duration-200">
+            <span className="text-sm text-gray-400 mb-2 font-medium">Unserviceability</span>
+            <span className={`text-3xl font-bold ${cityUnserviceability > THRESHOLDS.UNSERVICEABILITY ? 'text-error-500' : 'text-success-500'}`}>{cityUnserviceability.toFixed(1)}%</span>
+            <span className="text-xs text-gray-500">Threshold: {THRESHOLDS.UNSERVICEABILITY}%</span>
+          </div>
+          <div className="bg-dark-card border border-dark-border rounded-xl shadow-soft p-6 flex flex-col items-center hover:shadow-medium transition-all duration-200">
+            <span className="text-sm text-gray-400 mb-2 font-medium">Pods Breaching</span>
+            <span className="text-3xl font-bold text-error-500">{breachedPods}</span>
+            <span className="text-xs text-gray-500">of {pods.length} pods</span>
+          </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex flex-col items-center">
-          <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">Unserviceability</span>
-          <span className={`text-2xl font-bold ${cityUnserviceability > 5.0 ? 'text-instamart-red' : 'text-instamart-green'}`}>{cityUnserviceability.toFixed(1)}%</span>
-          <span className="text-xs text-gray-400 dark:text-gray-500">Threshold: 5.0%</span>
-        </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex flex-col items-center">
-          <span className="text-xs text-gray-500 dark:text-gray-400 mb-1">Pods Breaching</span>
-          <span className="text-2xl font-bold text-instamart-red">{breachedPods}</span>
-          <span className="text-xs text-gray-400 dark:text-gray-500">of {pods.length} pods</span>
-        </div>
-      </div>
 
-      {/* City Action Log */}
-      <div className="max-w-4xl mx-auto px-4 pb-4">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">City Owner Action Log</label>
+        {/* City Action Log */}
+        <div className="bg-dark-card border border-dark-border rounded-xl shadow-soft p-6 mb-6">
+          <label className="block text-sm font-medium text-white mb-3">City Owner Action Log</label>
           <textarea
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-instamart-blue focus:border-transparent"
-            rows={2}
+            className="w-full px-4 py-3 border border-dark-border bg-dark-hover text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent placeholder-gray-400"
+            rows={3}
             value={cityActionLog}
             onChange={e => handleCityActionChange(e.target.value)}
             placeholder="What is being done at the city level?"
@@ -132,33 +160,38 @@ const CityPods: React.FC = () => {
       </div>
 
       {/* Pods List */}
-      <div className="max-w-4xl mx-auto px-4 pb-8">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Pods in {cityName}</h2>
-        <div className="space-y-4">
+      <div className="max-w-7xl mx-auto px-6 pb-8">
+        <h2 className="text-xl font-bold text-white mb-6">Pods in {cityName}</h2>
+        <div className="space-y-6">
           {pods.map(pod => (
-            <div key={pod.pod_id} className="bg-white dark:bg-gray-800 rounded-lg shadow flex flex-col md:flex-row items-start md:items-center p-4 gap-4">
+            <div key={pod.pod_id} className="bg-dark-card border border-dark-border rounded-xl shadow-soft flex flex-col md:flex-row items-start md:items-center p-6 gap-6">
               <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center justify-between mb-3">
                   <div>
-                    <span className="text-lg font-semibold text-gray-900 dark:text-white">{pod.pod_name}</span>
-                    <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">{pod.zone}</span>
+                    <button 
+                      onClick={() => navigate(`/pod/${pod.pod_id}`)}
+                      className="text-lg font-semibold text-white hover:text-accent-400 transition-colors cursor-pointer"
+                    >
+                      {pod.pod_name}
+                    </button>
+                    <span className="ml-3 text-sm text-gray-400">{pod.zone}</span>
                   </div>
-                  <button onClick={() => navigate(`/pod/${pod.pod_id}`)} className="text-instamart-blue text-xs underline ml-2">Details</button>
+                  <button onClick={() => navigate(`/pod/${pod.pod_id}`)} className="text-accent-500 hover:text-accent-400 text-sm font-medium underline transition-colors">Details</button>
                 </div>
-                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Owner: {pod.pod_owner_name} (<a href={`mailto:${pod.pod_owner_email}`} className="text-instamart-blue underline">{pod.pod_owner_email}</a>)</div>
-                <div className="flex gap-6 mb-2">
+                <div className="text-sm text-gray-400 mb-3">Owner: {pod.pod_owner_name} (<a href={`mailto:${pod.pod_owner_email}`} className="text-accent-500 hover:text-accent-400 underline transition-colors">{pod.pod_owner_email}</a>)</div>
+                <div className="flex gap-8 mb-4">
                   <div>
-                    <span className="block text-xs text-gray-500 dark:text-gray-400">O2HAR</span>
-                    <span className={`font-bold ${pod.o2har > 9.0 ? 'text-instamart-red' : 'text-instamart-green'}`}>{pod.o2har} Mins</span>
+                    <span className="block text-xs text-gray-400 mb-1">O2HAR</span>
+                    <span className={`font-bold text-lg ${pod.o2har > THRESHOLDS.O2HAR ? 'text-error-500' : 'text-success-500'}`}>{pod.o2har} Mins</span>
                   </div>
                   <div>
-                    <span className="block text-xs text-gray-500 dark:text-gray-400">Unserviceability</span>
-                    <span className={`font-bold ${pod.unserviceability > 5.0 ? 'text-instamart-red' : 'text-instamart-green'}`}>{pod.unserviceability}%</span>
+                    <span className="block text-xs text-gray-400 mb-1">Unserviceability</span>
+                                          <span className={`font-bold text-lg ${pod.unserviceability > THRESHOLDS.UNSERVICEABILITY ? 'text-error-500' : 'text-success-500'}`}>{pod.unserviceability}%</span>
                   </div>
                 </div>
-                <label className="block text-xs text-gray-700 dark:text-gray-300 mb-1">Pod Owner Action Log</label>
+                <label className="block text-sm text-white mb-2">Pod Owner Action Log</label>
                 <textarea
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-instamart-blue focus:border-transparent"
+                  className="w-full px-4 py-3 border border-dark-border bg-dark-hover text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent placeholder-gray-400"
                   rows={2}
                   value={pod.actionLog}
                   onChange={e => handlePodActionChange(pod.pod_id, e.target.value)}
@@ -169,6 +202,9 @@ const CityPods: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* ChatBot */}
+      <ChatBot isOpen={chatOpen} onToggle={() => setChatOpen(!chatOpen)} />
     </div>
   );
 };

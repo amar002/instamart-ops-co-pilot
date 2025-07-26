@@ -4,13 +4,19 @@ export const THRESHOLDS = {
 };
 
 export const COLORS = {
-  SUCCESS: 'bg-swiggy-success',
-  ERROR: 'bg-swiggy-error',
-  WARNING: 'bg-swiggy-warning',
-  PRIMARY: 'bg-swiggy-primary',
-  SECONDARY: 'bg-swiggy-secondary',
-  ORANGE: 'bg-swiggy-orange',
-  RED: 'bg-swiggy-red',
+  SUCCESS: 'bg-success-500',
+  ERROR: 'bg-error-500',
+  ACCENT: 'bg-accent-500',
+  DARK_CARD: 'bg-dark-card',
+  DARK_BORDER: 'border-dark-border',
+};
+
+export const TEXT_COLORS = {
+  WHITE: 'text-white',
+  SUCCESS: 'text-success-500',
+  ERROR: 'text-error-500',
+  ACCENT: 'text-accent-500',
+  MUTED: 'text-gray-400',
 };
 
 export const MOCK_PROMPTQL_RESPONSES = [

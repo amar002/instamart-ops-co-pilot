@@ -1,31 +1,29 @@
 import React, { useState } from 'react';
-import { ChatMessage } from '../types';
-import { mockPromptQLResponse } from '../utils/helpers';
 
 interface ChatBotProps {
   isOpen: boolean;
   onToggle: () => void;
 }
 
+interface Message {
+  id: number;
+  message: string;
+  type: 'user' | 'bot';
+}
+
 const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: '1',
-      type: 'assistant',
-      message: 'Hello! I\'m your Instamart Ops Co-Pilot. How can I help you today?',
-      timestamp: new Date(),
-    },
+  const [messages, setMessages] = useState<Message[]>([
+    { id: 1, message: "Hello! I'm your Ops Co-Pilot. How can I help you today?", type: 'bot' }
   ]);
   const [inputMessage, setInputMessage] = useState('');
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
 
-    const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      type: 'user',
+    const userMessage: Message = {
+      id: messages.length + 1,
       message: inputMessage,
-      timestamp: new Date(),
+      type: 'user'
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -33,13 +31,12 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
 
     // Simulate AI response
     setTimeout(() => {
-      const aiResponse: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        type: 'assistant',
-        message: mockPromptQLResponse(inputMessage),
-        timestamp: new Date(),
+      const botMessage: Message = {
+        id: messages.length + 2,
+        message: "I'm here to help with your operations questions. What specific metrics or issues would you like to discuss?",
+        type: 'bot'
       };
-      setMessages(prev => [...prev, aiResponse]);
+      setMessages(prev => [...prev, botMessage]);
     }, 1000);
   };
 
@@ -53,7 +50,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
     return (
       <button
         onClick={onToggle}
-        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-swiggy-orange to-swiggy-red text-white rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 flex items-center justify-center text-2xl z-50"
+        className="fixed bottom-6 right-6 w-16 h-16 bg-accent-500 text-white rounded-xl shadow-large hover:shadow-soft hover:scale-110 transition-all duration-300 flex items-center justify-center text-2xl z-50"
       >
         💬
       </button>
@@ -61,10 +58,10 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 w-80 h-96 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col z-50">
+    <div className="fixed bottom-6 right-6 w-80 h-96 bg-dark-card border border-dark-border rounded-xl shadow-large flex flex-col z-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-swiggy-orange to-swiggy-red text-white p-4 rounded-t-xl flex items-center justify-between">
-        <div className="flex items-center space-x-2">
+      <div className="bg-accent-500 text-white p-4 rounded-t-xl flex items-center justify-between">
+        <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
             <span className="text-sm">🤖</span>
           </div>
@@ -72,24 +69,24 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
         </div>
         <button
           onClick={onToggle}
-          className="text-white hover:text-gray-200 transition-colors hover:bg-white/20 p-1 rounded"
+          className="text-white hover:text-white/80 transition-colors hover:bg-white/20 p-1 rounded-lg"
         >
           ✕
         </button>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      <div className="flex-1 p-4 overflow-y-auto space-y-3">
         {messages.map((message) => (
           <div
             key={message.id}
             className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`max-w-xs px-3 py-2 rounded-lg text-sm ${
+              className={`max-w-xs px-4 py-3 rounded-xl text-sm shadow-soft ${
                 message.type === 'user'
-                  ? 'bg-swiggy-orange text-white'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                  ? 'bg-accent-500 text-white'
+                  : 'bg-dark-hover text-white'
               }`}
             >
               {message.message}
@@ -99,19 +96,19 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-        <div className="flex space-x-2">
+      <div className="p-4 border-t border-dark-border">
+        <div className="flex space-x-3">
           <input
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask me anything..."
-            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-swiggy-orange focus:border-transparent"
+            className="flex-1 px-4 py-3 border border-dark-border bg-dark-hover rounded-xl focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent placeholder-gray-400 text-white"
           />
           <button
             onClick={handleSendMessage}
-            className="px-4 py-2 bg-swiggy-orange text-white rounded-lg hover:bg-swiggy-red transition-colors font-medium"
+            className="px-4 py-3 bg-accent-500 text-white rounded-xl hover:shadow-medium transition-all duration-200 font-medium hover:scale-105"
           >
             Send
           </button>

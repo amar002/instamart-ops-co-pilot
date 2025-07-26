@@ -1,11 +1,21 @@
-import { PodData } from '../types';
+import { PodData, CitySummary } from '../types';
 import { THRESHOLDS } from './constants';
 
 export const getLatestPodData = (pods: PodData[]): PodData[] => {
-  const latestDate = new Date(Math.max(...pods.map(pod => new Date(pod.date).getTime())));
-  const latestDateStr = latestDate.toISOString().split('T')[0];
+  // Get latest data per pod (similar to getCitySummaries logic)
+  const latestPods: PodData[] = [];
+  const podMap = new Map<string, PodData>();
   
-  return pods.filter(pod => pod.date === latestDateStr);
+  pods.forEach(pod => {
+    const key = pod.pod_id;
+    if (!podMap.has(key) || new Date(pod.date) > new Date(podMap.get(key)!.date)) {
+      podMap.set(key, pod);
+    }
+  });
+  
+  podMap.forEach(pod => latestPods.push(pod));
+  
+  return latestPods;
 };
 
 export const getPodTrend = (pods: PodData[], podId: string): PodData[] => {
@@ -16,15 +26,70 @@ export const getPodTrend = (pods: PodData[], podId: string): PodData[] => {
 };
 
 export const isMetricBreached = (metric: 'o2har' | 'unserviceability', value: number): boolean => {
-  const threshold = metric === 'o2har' ? THRESHOLDS.O2HAR : THRESHOLDS.UNSERVICEABILITY;
-  return value > threshold;
+  return metric === 'o2har' ? value > THRESHOLDS.O2HAR : value > THRESHOLDS.UNSERVICEABILITY;
 };
 
 export const getStatusColor = (pod: PodData): string => {
   const o2harBreached = isMetricBreached('o2har', pod.o2har);
   const unserviceabilityBreached = isMetricBreached('unserviceability', pod.unserviceability);
   
-  return (o2harBreached || unserviceabilityBreached) ? 'bg-swiggy-error' : 'bg-swiggy-success';
+  return (o2harBreached || unserviceabilityBreached) ? 'bg-error-500' : 'bg-success-500';
+};
+
+export const getCitySummaries = (podsData: PodData[]): CitySummary[] => {
+  // Get latest data per pod
+  const latestPods: PodData[] = [];
+  const podMap = new Map<string, PodData>();
+  
+  podsData.forEach(pod => {
+    const key = pod.pod_id;
+    if (!podMap.has(key) || new Date(pod.date) > new Date(podMap.get(key)!.date)) {
+      podMap.set(key, pod);
+    }
+  });
+  
+  podMap.forEach(pod => latestPods.push(pod));
+  
+  // Group by city
+  const cityMap = new Map<string, CitySummary>();
+  
+  latestPods.forEach(pod => {
+    if (!cityMap.has(pod.city)) {
+      cityMap.set(pod.city, {
+        city: pod.city,
+        o2har: 0,
+        unserviceability: 0,
+        totalPods: 0,
+        breachedPods: 0,
+        lastUpdated: pod.date,
+        owner: {
+          name: pod.city_owner_name,
+          email: pod.city_owner_email,
+        },
+      });
+    }
+    
+    const city = cityMap.get(pod.city)!;
+    city.o2har += pod.o2har;
+    city.unserviceability += pod.unserviceability;
+    city.totalPods += 1;
+    
+    if (pod.o2har > THRESHOLDS.O2HAR || pod.unserviceability > THRESHOLDS.UNSERVICEABILITY) {
+      city.breachedPods += 1;
+    }
+    
+    if (new Date(pod.date) > new Date(city.lastUpdated)) {
+      city.lastUpdated = pod.date;
+    }
+  });
+  
+  // Average metrics
+  cityMap.forEach(city => {
+    city.o2har = city.o2har / city.totalPods;
+    city.unserviceability = city.unserviceability / city.totalPods;
+  });
+  
+  return Array.from(cityMap.values());
 };
 
 export const mockPromptQLResponse = (question: string): string => {
