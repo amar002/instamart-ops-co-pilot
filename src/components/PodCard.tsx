@@ -10,28 +10,33 @@ const PodCard: React.FC<PodCardProps> = ({ pod, onClick }) => {
 
   return (
     <div 
-      className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-4 cursor-pointer hover:shadow-lg transition-shadow duration-200 border border-gray-200 dark:border-gray-700"
+      className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-4 cursor-pointer hover:shadow-xl hover:scale-105 transition-all duration-300 border border-gray-200 dark:border-gray-700 group"
       onClick={() => onClick(pod.pod_id)}
     >
-      <div className="flex items-center justify-between mb-3">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{pod.pod_name}</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">{pod.zone}</p>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-swiggy-orange to-swiggy-red rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+            <span className="text-white font-bold text-sm">{pod.pod_name.charAt(0)}</span>
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-swiggy-orange transition-colors">{pod.pod_name}</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">{pod.zone}</p>
+          </div>
         </div>
-        <div className={`w-3 h-3 rounded-full ${statusColor}`}></div>
+        <div className={`w-4 h-4 rounded-full ${statusColor} shadow-md`}></div>
       </div>
       
-      <div className="grid grid-cols-2 gap-4 mb-3">
-        <div className="text-center">
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">O2HAR</p>
-          <p className={`text-lg font-bold ${o2harBreached ? 'text-instamart-red' : 'text-instamart-green'}`}>
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 font-medium">O2HAR</p>
+          <p className={`text-xl font-bold ${o2harBreached ? 'text-swiggy-error' : 'text-swiggy-success'}`}>
             {pod.o2har} Mins
           </p>
           <p className="text-xs text-gray-400 dark:text-gray-500">Threshold: {THRESHOLDS.O2HAR} Mins</p>
         </div>
-        <div className="text-center">
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Unserviceability</p>
-          <p className={`text-lg font-bold ${unserviceabilityBreached ? 'text-instamart-red' : 'text-instamart-green'}`}>
+        <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 font-medium">Unserviceability</p>
+          <p className={`text-xl font-bold ${unserviceabilityBreached ? 'text-swiggy-error' : 'text-swiggy-success'}`}>
             {pod.unserviceability}%
           </p>
           <p className="text-xs text-gray-400 dark:text-gray-500">Threshold: {THRESHOLDS.UNSERVICEABILITY}%</p>

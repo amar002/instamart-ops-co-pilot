@@ -24,7 +24,7 @@ export const getStatusColor = (pod: PodData): string => {
   const o2harBreached = isMetricBreached('o2har', pod.o2har);
   const unserviceabilityBreached = isMetricBreached('unserviceability', pod.unserviceability);
   
-  return (o2harBreached || unserviceabilityBreached) ? 'bg-instamart-red' : 'bg-instamart-green';
+  return (o2harBreached || unserviceabilityBreached) ? 'bg-swiggy-error' : 'bg-swiggy-success';
 };
 
 export const mockPromptQLResponse = (question: string): string => {

@@ -53,7 +53,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
     return (
       <button
         onClick={onToggle}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-instamart-blue text-white rounded-full shadow-lg hover:shadow-xl transition-shadow duration-200 flex items-center justify-center text-2xl z-50"
+        className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-swiggy-orange to-swiggy-red text-white rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 flex items-center justify-center text-2xl z-50"
       >
         💬
       </button>
@@ -61,13 +61,18 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 w-80 h-96 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col z-50">
+    <div className="fixed bottom-6 right-6 w-80 h-96 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col z-50">
       {/* Header */}
-      <div className="bg-instamart-blue text-white p-4 rounded-t-lg flex items-center justify-between">
-        <h3 className="font-semibold">Ops Co-Pilot</h3>
+      <div className="bg-gradient-to-r from-swiggy-orange to-swiggy-red text-white p-4 rounded-t-xl flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+            <span className="text-sm">🤖</span>
+          </div>
+          <h3 className="font-bold">Ops Co-Pilot</h3>
+        </div>
         <button
           onClick={onToggle}
-          className="text-white hover:text-gray-200 transition-colors"
+          className="text-white hover:text-gray-200 transition-colors hover:bg-white/20 p-1 rounded"
         >
           ✕
         </button>
@@ -83,7 +88,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
             <div
               className={`max-w-xs px-3 py-2 rounded-lg text-sm ${
                 message.type === 'user'
-                  ? 'bg-instamart-blue text-white'
+                  ? 'bg-swiggy-orange text-white'
                   : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
               }`}
             >
@@ -102,11 +107,11 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onToggle }) => {
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask me anything..."
-            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-instamart-blue focus:border-transparent"
+            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-swiggy-orange focus:border-transparent"
           />
           <button
             onClick={handleSendMessage}
-            className="px-4 py-2 bg-instamart-blue text-white rounded-lg hover:bg-blue-600 transition-colors"
+            className="px-4 py-2 bg-swiggy-orange text-white rounded-lg hover:bg-swiggy-red transition-colors font-medium"
           >
             Send
           </button>

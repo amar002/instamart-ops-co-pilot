@@ -4,10 +4,13 @@ export const THRESHOLDS = {
 };
 
 export const COLORS = {
-  GREEN: 'bg-instamart-green',
-  RED: 'bg-instamart-red',
-  BLUE: 'bg-instamart-blue',
-  GRAY: 'bg-instamart-gray',
+  SUCCESS: 'bg-swiggy-success',
+  ERROR: 'bg-swiggy-error',
+  WARNING: 'bg-swiggy-warning',
+  PRIMARY: 'bg-swiggy-primary',
+  SECONDARY: 'bg-swiggy-secondary',
+  ORANGE: 'bg-swiggy-orange',
+  RED: 'bg-swiggy-red',
 };
 
 export const MOCK_PROMPTQL_RESPONSES = [
