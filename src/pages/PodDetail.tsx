@@ -163,20 +163,20 @@ const PodDetail: React.FC = () => {
             {currentPod.root_causes_details && (
               <div className="mb-4 md:mb-6">
                 <h3 className="text-md font-medium text-white mb-3 md:mb-4">Root Causes</h3>
-                <div className="bg-error-500/10 border border-error-500/20 rounded-xl p-4 md:p-6">
+                <div className="bg-error-500/10 border border-error-500/20 rounded-xl p-4 md:p-6 text-white">
                   <div className="space-y-3 md:space-y-4">
                     {currentPod.root_causes_details.map((cause, index) => (
-                      <div key={index} className="flex flex-col md:flex-row md:items-center md:justify-between p-3 md:p-4 bg-dark-hover rounded-xl border border-error-500/20 space-y-2 md:space-y-0">
+                      <div key={index} className="flex flex-col md:flex-row md:items-center md:justify-between p-3 md:p-4 bg-dark-hover rounded-xl border border-error-500/20 space-y-2 md:space-y-0 text-white">
                         <div className="flex items-center space-x-2 md:space-x-3">
                           <div className="w-3 h-3 bg-error-500 rounded-full flex-shrink-0"></div>
-                          <span className="text-error-400 font-medium text-sm md:text-base">{cause.description}</span>
+                          <span className="text-white font-medium text-sm md:text-base">{cause.description}</span>
                         </div>
-                        <div className="text-left md:text-right">
-                          <div className="flex flex-col md:flex-row md:items-center space-y-1 md:space-y-0 md:space-x-2">
-                            <span className="text-error-400 font-semibold text-base md:text-lg">{cause.actual} {cause.unit}</span>
-                            <span className="text-error-400 text-xs md:text-sm">vs expected</span>
-                            <span className="text-error-400 font-semibold text-base md:text-lg">{cause.expected} {cause.unit}</span>
-                          </div>
+                                                  <div className="text-left md:text-right">
+                            <div className="flex flex-col md:flex-row md:items-center space-y-1 md:space-y-0 md:space-x-2">
+                              <span className="text-white font-semibold text-base md:text-lg">{cause.actual} {cause.unit}</span>
+                              <span className="text-white text-xs md:text-sm">vs expected</span>
+                              <span className="text-white font-semibold text-base md:text-lg">{cause.expected} {cause.unit}</span>
+                            </div>
                           <div className="flex items-center space-x-2 mt-1">
                             <span className={`text-xs md:text-sm font-medium ${cause.percent_diff > 0 ? 'text-error-500' : 'text-success-500'}`}>
                               {cause.percent_diff > 0 ? '↗' : '↘'} {Math.abs(cause.percent_diff)}%
