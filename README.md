@@ -1,6 +1,6 @@
 # Instamart Ops Co-Pilot
 
-A mobile-friendly internal web app for Swiggy Instamart's city operations teams to monitor red pods, view metrics, and get AI-powered recommendations.
+A mobile-friendly internal web app for Swiggy Instamart's city operations teams to monitor red pods, view metrics, and get AI-powered recommendations. It is live at https://amar-co-pilot.netlify.app/
 
 ## 🎯 Features
 
